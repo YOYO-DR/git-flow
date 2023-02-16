@@ -29,3 +29,5 @@ def filtrar(info:dict, filtro:str):
     if info[i]['estado']==filtro:
       aux.setdefault(i,info[i])
   return aux
+
+
