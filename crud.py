@@ -29,5 +29,3 @@ def borrar(ruta,identificador):
     if encontro==False:
         print("error: no existe una tarea con ese id\n")
     return
-
-borrar(rut,1)
