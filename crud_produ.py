@@ -3,7 +3,7 @@ from datetime import datetime
 
 rut=r'hojaDatosProductos.xlsx'
 
-#funciones alejandra
+#funciones alejandra 
 
 def consultar_producto(rut:str,extraer:str):
     Archivo_Exccel=load_workbook(rut)
