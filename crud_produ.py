@@ -78,6 +78,6 @@ while True:
     datosActualizados['cantidad']=input('Indique el nombre de el producto: ')
     agregar_producto(rut,datosActualizados)
   elif accion==4:
-    print('\n** Eliminar tarea **')
+    print('\n** Eliminar producto **')
     iden=int(input('Indique el ID de el producto que desea eliminar: '))
     borrar(rut,iden)
