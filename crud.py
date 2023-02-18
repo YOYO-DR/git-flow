@@ -1,7 +1,7 @@
 from openpyxl import load_workbook
 from datetime import datetime
 
-rut=r'hojaDatos.xlsx'
+rut=r'hojaDatosTareas.xlsx'
 
 #funciones breynner
 def leer(ruta:str, extraer:str):
@@ -14,13 +14,13 @@ def leer(ruta:str, extraer:str):
 
   for i in hojaDatos:
     if isinstance(i[0].value,int):
-      info.setdefault(i[0].value,{'titulo':i[1].value, 'descripcion':i[2].value,'estado':i[3].value,'fecha_inicio':i[4].value,'fecha_finalizacion':i[5].value})
+      info.setdefault(i[0].value,{'nombre':i[1].value, 'descripcion':i[2].value,'estado':i[3].value,'fecha_inicio':i[4].value,'fecha_finalizacion':i[5].value})
 
   if not(extraer=='todo'):
     info=filtrar(info,extraer)
   for i in info:
     print('********** Tarea ***********')
-    print('id:'+str(i)+'\n'+'titulo: '+str(info[i]['titulo'])+'\n'+'descripcion: '+str(info[i]['descripcion'])+'\n'+'estado: '+str(info[i]['estado'])+'\n'+'fecha de creacion: '+str(info[i]['fecha_inicio'])+'\n'+'fecha_finalizacion: '+str(info[i]['fecha finalizacion']))
+    print('id:'+str(i)+'\n'+'nombre: '+str(info[i]['nombre'])+'\n'+'descripcion: '+str(info[i]['descripcion'])+'\n'+'estado: '+str(info[i]['estado'])+'\n'+'fecha de creacion: '+str(info[i]['fecha_inicio'])+'\n'+'fecha_finalizacion: '+str(info[i]['fecha_finalizacion']))
     print()
   return info
 
@@ -55,7 +55,7 @@ def actualizar(ruta:str,identificador:int,datosActualizados:dict):
           hoja.cell(row=fila,column=descripcion).value=datosActualizados[d]
         elif d=='estado' and not(datosActualizados[d]==''):
           hoja.cell(row=fila,column=estado).value=datosActualizados[d]
-        elif d=='fecha inicio' and not(datosActualizados[d]==''):
+        elif d=='fecha_inicio' and not(datosActualizados[d]==''):
           hoja.cell(row=fila,column=fechaInicio).value=datosActualizados[d]
         elif d=='fecha finalizado' and not(datosActualizados[d]==''):
           hoja.cell(row=fila,column=fechaFinalizado).value=datosActualizados[d]
@@ -67,13 +67,13 @@ def actualizar(ruta:str,identificador:int,datosActualizados:dict):
 
 #funciones lili
 
-def agregar (ruta:int, datos: dict):
+def agregar (ruta:int, datos:dict):
     archivo_exccel =load_workbook(ruta)
     hoja_datos = archivo_exccel["tareas"]
     hoja_datos=hoja_datos["A2":"F"+str(hoja_datos.max_row+1)]
     hoja=archivo_exccel.active
 
-    titulo=2
+    nombre=2
     descripcion=3
     estado=4 
     fecha_inicio=5
@@ -83,7 +83,7 @@ def agregar (ruta:int, datos: dict):
         if not(isinstance(i[0].value, int)):
             identificador=i[0].row
             hoja.cell(row=identificador,column=1).value=identificador-1
-            hoja.cell(row=identificador,column=titulo).value=datos["titulo"]
+            hoja.cell(row=identificador,column=nombre).value=datos["nombre"]
             hoja.cell(row=identificador,column=descripcion).value=datos["descripcion"]
             hoja.cell(row=identificador,column=estado).value=datos["estado"]
             hoja.cell(row=identificador,column=fecha_inicio).value=datos["fecha_inicio"]
@@ -98,7 +98,7 @@ def borrar(ruta,identificador):
     hoja_datos=hoja_datos["A2":"F"+str(hoja_datos.max_row)]
     hoja=archivo_exccel.active
 
-    titulo=2
+    nombre=2
     descripcion=3
     estado=4
     fecha_inicio=5
@@ -110,7 +110,7 @@ def borrar(ruta,identificador):
             encontro=True
 
             hoja.cell(row=fila, column=1).value=""
-            hoja.cell(row=fila, column=titulo).value=""
+            hoja.cell(row=fila, column=nombre).value=""
             hoja.cell(row=fila, column=descripcion).value=""
             hoja.cell(row=fila, column=estado).value=""
             hoja.cell(row=fila, column=fecha_inicio).value=""
@@ -120,7 +120,7 @@ def borrar(ruta,identificador):
         print("error: no existe una tarea con ese id\n")
 
 #wihle breynner
-datosActualizados={'titulo':'','descripcion':'','estado':'','fecha inicio':'','fecha finalizacion':''}
+datosActualizados={'nombre':'','descripcion':'','estado':'','fecha_inicio':'','fecha_finalizacion':''}
 while True:
   print('Indique la accion que desea realizar: \nConsultar: 1\nActualizar: 2\nCrear nueva tarea: 3\nBorrar: 4')
   accion =int(input('Escriba la opcion: '))
@@ -146,11 +146,11 @@ while True:
       print('\n\n** Consultado todas las tareas **')
       leer(rut,'Finalizada')
   elif accion==2:
-    datosActualizados={'titulo':'','descripcion':'','estado':'','fecha inicio':'','fecha finalizacion':''}
+    datosActualizados={'nombre':'','descripcion':'','estado':'','fecha_inicio':'','fecha_finalizacion':''}
     print('** Actualizar Tarea **\n')
     idActualizar=int(input('Indique el ID de la tarea que desea actualizar: '))
-    print('\n** Nuevo titulo **\n** Nota: si no desea actualizar el titulo solo oprima ENTER **')
-    datosActualizados['titulo']=input('Indique el nuevo titulo de la tarea: ')
+    print('\n** Nuevo nombre **\n** Nota: si no desea actualizar el nombre solo oprima ENTER **')
+    datosActualizados['nombre']=input('Indique el nuevo nombre de la tarea: ')
     print('\n** Nueva descripcion **\n** Nota: si no desea actualizar la descripcion solo oprima ENTER **')
     datosActualizados['descripcion']=input('Indique la nueva descripcion de la tarea: ')
     print('\n** Nueva estado **\nEn espera: 2\nEn ejecucion: 3\nPor aprobar: 4\nFinalizado: 5\n** Nota: si no desea actualizar el estado solo oprima ENTER **')
@@ -164,16 +164,16 @@ while True:
     elif estadoNuevo=='5':
       now=datetime.now()
       datosActualizados['estado']='Finalizada'
-      datosActualizados['fecha finalizacion']=str(now.day) +'/'+str(now.month)+'/'+str(now.year)
+      datosActualizados['fecha_finalizacion']=str(now.day) +'/'+str(now.month)+'/'+str(now.year)
     now=datetime.now()
-    datosActualizados['fecha inicio']=str(now.day) +'/'+str(now.month)+'/'+str(now.year)
+    datosActualizados['fecha_inicio']=str(now.day) +'/'+str(now.month)+'/'+str(now.year)
     actualizar(rut,idActualizar, datosActualizados)
     print()
   elif accion==3:
-    datosActualizados={'titulo':'','descripcion':'','estado':'','fecha_inicio':'','fecha_finalizacion':''}
+    datosActualizados={'nombre':'','descripcion':'','estado':'','fecha_inicio':'','fecha_finalizacion':''}
     print('** Crear nueva Tarea **\n')
-    print('** Titulo **\n')
-    datosActualizados['titulo']=input('Indique el titulo de la tarea: ')
+    print('** nombre **\n')
+    datosActualizados['nombre']=input('Indique el nombre de la tarea: ')
     print('\n** descripcion **')
     datosActualizados['descripcion']=input('Indique la descripcion de la tarea: ')
     print()
